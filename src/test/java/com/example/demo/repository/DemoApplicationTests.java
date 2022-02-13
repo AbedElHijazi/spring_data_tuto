@@ -7,13 +7,16 @@ import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import com.example.demo.model.Transaction;
 
 @SpringBootTest
 class DemoApplicationTests {
 
     @Autowired
     ClientDAO clientDao;
-
+    
+    private CompteDAO compteDAO;
+    
     @Test
     @Ignore
     public void createAndGet() {
@@ -41,7 +44,26 @@ class DemoApplicationTests {
         clientDao.save(c1);
         Client c2 = clientDao.findByEmail("pascal2.fares@lecnam.net");
         assertThat(c2.getFriends().size()).isEqualTo(c1.getFriends().size());
-
     }
-
+    
+    @Test
+    public void createVirement() {
+        Client c1 = clientDao.findByEmail("abedalkarim.hijazi@isae.edu.lb");
+        Client c2 = clientDao.findByEmail("MonAmis@isae.edu.lb");
+        
+        if (c2==null)
+        {
+            Client c = new Client("MonAmis", "MonAmis", "MonAmis@isae.edu.lb");
+            Compte cpt1 = new Compte(c, 0);
+            c.setCompte(cpt1);
+            
+            c1.getFriends().add(c);
+            clientDao.save(c);
+            c2=c;
+        }
+        
+        Compte compteC2 = compteDAO.findByProprietaire(c2);
+        Transaction trans1 = new Transaction(5000,c1,compteC2);
+        assertThat(trans1);
+    }
 }
