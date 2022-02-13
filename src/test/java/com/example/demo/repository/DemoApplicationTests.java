@@ -55,12 +55,12 @@ class DemoApplicationTests {
         {
             Client c = new Client("MonAmis", "MonAmis", "MonAmis@isae.edu.lb");
             Compte cpt1 = new Compte(c, 0);
-            c.setCompte(cpt1);
-            
-            c1.getFriends().add(c);
-            clientDao.save(c);
+            c.setCompte(cpt1);        
             c2=c;
         }
+        
+         c2.getFriends().add(c1);
+         clientDao.save(c2);
         
         Compte compteC2 = compteDAO.findByProprietaire(c2);
         Transaction trans1 = new Transaction(5000,c1,compteC2);
